@@ -8,6 +8,8 @@ public class Main {
 
         Calculator calculator = new Calculator(reader.getN( ), reader.getMatrix( ), reader.getB());
         calculator.solveByGauss( );
+        calculator.findDeterminant();
+        calculator.findUnknowns();
 
     }
 }

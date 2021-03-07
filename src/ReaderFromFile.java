@@ -44,6 +44,7 @@ public class ReaderFromFile extends Reader {
             }
         } catch (NullPointerException | NumberFormatException ex) {
             System.out.println("Ваша матрица неисправна. Исправьте файл и повторите ввод");
+            System.exit(0);
         }
         reader.setB(b);
         return matrix2;
