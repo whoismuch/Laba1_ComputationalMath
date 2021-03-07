@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class Calculator {
 
     private int n;
@@ -12,6 +14,7 @@ public class Calculator {
 
 
     public void solveByGauss ( ) {
+        int step = 0;
         for (int i = 0; i < n-1; i++) {
             if (matrix[i][i] == 0) {
                 int count = 0;
@@ -24,6 +27,10 @@ public class Calculator {
                         double tmpB = b[i];
                         b[i] = b[j];
                         b[j] = tmpB;
+
+                        step ++;
+                        System.out.println("Шаг " + step + ": ");
+                        printMatrix();
                         break;
                     }
                 }
@@ -39,6 +46,22 @@ public class Calculator {
                 b[p] = b[i]*koef+b[p];
             }
 
+            step++;
+            System.out.println("Шаг " + step + ": ");
+            printMatrix();
+
+        }
+    }
+
+    public void printMatrix() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                DecimalFormat dF = new DecimalFormat( "#.###" );
+                if (dF.format(matrix[i][j]).equals("-0.000")) System.out.printf("%15.3f", 0d);
+                else System.out.printf("%15.3f", matrix[i][j]);
+            }
+            System.out.printf("%15.3f", b[i]);
+            System.out.println("\r");
         }
     }
 
