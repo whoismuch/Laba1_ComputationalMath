@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Reader {
@@ -8,7 +6,8 @@ public class Reader {
     private Scanner scanner;
     private BufferedReader bufferedReader;
     private int n;
-    private int matrix[][];
+    private double[][] matrix;
+    private double[] b;
 
     public void read ( ) {
         try {
@@ -58,11 +57,11 @@ public class Reader {
         this.n = n;
     }
 
-    public int[][] getMatrix ( ) {
+    public double[][] getMatrix ( ) {
         return matrix;
     }
 
-    public void setMatrix (int[][] matrix) {
+    public void setMatrix (double[][] matrix) {
         this.matrix = matrix;
     }
 
@@ -90,4 +89,14 @@ public class Reader {
     public void setBufferedReader (BufferedReader bufferedReader) {
         this.bufferedReader = bufferedReader;
     }
+
+
+    public double[] getB ( ) {
+        return b;
+    }
+
+    public void setB (double[] b) {
+        this.b = b;
+    }
+
 }

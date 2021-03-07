@@ -1,6 +1,4 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class ReaderFromFile extends Reader {
@@ -31,20 +29,23 @@ public class ReaderFromFile extends Reader {
         return n;
     }
 
-    private int[][] readMatrixFromFile ( ) throws IOException {
-        int[][] matrix2 = new int[reader.getN( )][reader.getN( )];
+    private double[][] readMatrixFromFile ( ) throws IOException {
+        double[][] matrix2 = new double[reader.getN( )][reader.getN( )];
+        double[] b = new double[reader.getN()];
         try {
             for (int i = 0; i < reader.getN( ); i++) {
                 String line = getBufferedReader( ).readLine( );
-                String[] matrix1 = new String[reader.getN( )];
+                String[] matrix1 = new String[reader.getN( )+1];
                 matrix1 = line.split(" ");
                 for (int j = 0; j < reader.getN( ); j++) {
                     matrix2[i][j] = Integer.parseInt(matrix1[j]);
                 }
+                b[i] = Integer.parseInt(matrix1[reader.getN()]);
             }
         } catch (NullPointerException | NumberFormatException ex) {
             System.out.println("Ваша матрица неисправна. Исправьте файл и повторите ввод");
         }
+        reader.setB(b);
         return matrix2;
     }
 

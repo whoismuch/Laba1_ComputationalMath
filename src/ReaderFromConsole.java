@@ -1,6 +1,3 @@
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -34,14 +31,18 @@ public class ReaderFromConsole extends Reader {
         return n;
     }
 
-    public int[][] readMatrixFromConsole ( ) {
-        int[][] matrix = new int[reader.getN( )][reader.getN( )];
+    public double[][] readMatrixFromConsole ( ) {
+        double[][] matrix = new double[reader.getN( )][reader.getN( )];
+        double[] b = new double[reader.getN()];
         System.out.println("Перейдем к заполнению матрицы: ");
         for (int i = 0; i < reader.getN( ); i++) {
             for (int j = 0; j < reader.getN( ); j++) {
                 matrix[i][j] = readInt(null);
             }
+            b[i] = readInt(null);
+
         }
+        reader.setB(b);
         return matrix;
 
     }
@@ -76,7 +77,7 @@ public class ReaderFromConsole extends Reader {
                 flag = true;
 
             } catch (NumberFormatException ex) {
-                System.out.println("Элемент матрицы должен быть целым числом. К сожалению, вам придется повторить ввод");
+                System.out.println("Элемент матрицы должен быть вещественным числом. К сожалению, вам придется повторить ввод");
                 System.exit(0);
             }
         }
