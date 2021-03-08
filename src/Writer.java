@@ -26,7 +26,6 @@ public class Writer {
     }
 
     public void printVector (String message, String letter, double[] vector) {
-        DecimalFormat dF = new DecimalFormat("#.###");
         System.out.println(message);
         int count = 0;
         for (int i = 0; i < vector.length; i++) {

@@ -25,6 +25,9 @@ public class Calculator {
         copyData();
     }
 
+    //Копируем матрицу и вектор правых частей в другую матрицу и вектор
+    //Это нужно, чтобы корректно посчитать вектор невязок (т. к. там мы должны работать с первоначальными данными,
+    //а матрицу и вектор правых частей мы в процессе решения будем видоизменять)
     public void copyData ( ) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -34,6 +37,7 @@ public class Calculator {
         }
     }
 
+    //Метод Гаусса + несколько дополнительных требований по ТЗ
     public void solveByGauss ( ) {
         triangleForm( );
         findDeterminant( );
@@ -41,6 +45,7 @@ public class Calculator {
         findDiscrepancy( );
     }
 
+    //Приводим матрицу к треугольной форме (прямой ход)
     public void triangleForm ( ) {
         int step = 0;
         for (int i = 0; i < n - 1; i++) {
@@ -84,6 +89,7 @@ public class Calculator {
     }
 
 
+    //Ищем определитель. Так как матрица приведена к треугольному виду, достаточно перемножить элементы главной диагонали матрицы
     public void findDeterminant ( ) {
         double det = 1d;
         for (int i = 0; i < n; i++) {
@@ -91,12 +97,15 @@ public class Calculator {
         }
         writer.printValue("%1.3f", "Определитель равен: ", det);
         System.out.println( );
+
+        //В случае, если определитель равен 0, по теореме Кронекера-Капелли Rg матрицы < n -> решение не единственно
         if (det == 0) {
             System.out.println("Ой-ой-ой, смотрите-ка, определитель равен нулю, а значит, система имеет либо бесконечное количество решений, либо не имеет решений вообще. \nНекрасиво, правда? Давайте-ка вы все исправите и мы попробуем еще раз." );
             System.exit(0);
         }
     }
 
+    //Ищем вектор неизвестных (обраный ход)
     public void findUnknowns ( ) {
         for (int i = n - 1; i >= 0; i--) {
             double tmp = b[i];
@@ -109,6 +118,7 @@ public class Calculator {
         writer.printVector("Вектор неизвестных: ", "x", x);
     }
 
+    //Ищем вектор невязок
     public void findDiscrepancy ( ) {
         for (int i = 0; i < n; i++) {
             double ax_ = 0;

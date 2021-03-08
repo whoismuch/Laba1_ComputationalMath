@@ -37,6 +37,7 @@ public class ReaderFromFile extends Reader {
                 String line = getBufferedReader( ).readLine( );
                 String[] matrix1 = new String[reader.getN( )+1];
                 matrix1 = line.split(" ");
+                //Если столбцов больше, чем n+1 -> матрица не квадратная и все плохо
                 if (matrix1.length > reader.getN() + 1) throw new NumberFormatException();
                 for (int j = 0; j < reader.getN( ); j++) {
                     matrix2[i][j] = Double.parseDouble(matrix1[j]);
@@ -44,6 +45,7 @@ public class ReaderFromFile extends Reader {
                 b[i] = Double.parseDouble(matrix1[reader.getN()]);
             }
             String line = getBufferedReader( ).readLine( );
+            //Если строк больше, чем n -> матрица не квадратная и все плохо
             if (line != null) throw new NumberFormatException();
         } catch (NullPointerException | NumberFormatException ex) {
             System.out.println("Ваша матрица неисправна. Исправьте файл и повторите ввод");
