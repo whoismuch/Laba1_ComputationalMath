@@ -6,20 +6,44 @@ public class Calculator {
 
     private int n;
     private double[][] matrix;
+    private double[][] oldMatrix;
     private double[] b;
+    private double[] oldB;
     private double[] x;
+    private double[] r;
+    private Writer writer;
 
     public Calculator (int n, double[][] matrix, double[] b) {
+        writer = new Writer( );
         this.n = n;
         this.matrix = matrix;
         this.b = b;
         x = new double[n];
+        r = new double[n];
+        oldMatrix = new double[n][n];
+        oldB = new double[n];
+        copyData();
     }
 
+    public void copyData ( ) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                oldMatrix[i][j] = matrix[i][j];
+            }
+            oldB[i] = b[i];
+        }
+    }
 
     public void solveByGauss ( ) {
+        triangleForm( );
+        findDeterminant( );
+        findUnknowns( );
+        findDiscrepancy( );
+    }
+
+    public void triangleForm ( ) {
         int step = 0;
-        for (int i = 0; i < n-1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             if (matrix[i][i] == 0) {
                 int count = 0;
                 for (int j = i + 1; j < n; j++) {
@@ -32,9 +56,9 @@ public class Calculator {
                         b[i] = b[j];
                         b[j] = tmpB;
 
-                        step ++;
+                        step++;
                         System.out.println("Шаг " + step + ": ");
-                        printMatrix();
+                        writer.printMatrix(matrix, b);
                         break;
                     }
                 }
@@ -42,66 +66,62 @@ public class Calculator {
             }
 
 
-            for (int p = i+1; p < n; p++) {
-                double koef = -1*matrix[p][i]/matrix[i][i];
-                for (int s = i; s<n; s++) {
-                    matrix[p][s] = matrix[i][s]*koef+matrix[p][s];
+            for (int p = i + 1; p < n; p++) {
+                double koef = -1 * matrix[p][i] / matrix[i][i];
+                for (int s = i; s < n; s++) {
+                    matrix[p][s] = matrix[i][s] * koef + matrix[p][s];
                 }
-                b[p] = b[i]*koef+b[p];
+                b[p] = b[i] * koef + b[p];
             }
 
             step++;
             System.out.println("Шаг " + step + ": ");
-            printMatrix();
+            writer.printMatrix(matrix, b);
 
         }
+
+
     }
 
-    public void findUnknowns() {
-        for (int i=n-1; i>=0; i--) {
-            double tmp = b[i];
-            for (int j=n-1; j>i; j--) {
-                tmp-=matrix[i][j]*x[j];
-            }
-            x[i] = tmp/matrix[i][i];
-        }
 
-        printUnknowns();
-    }
-
-    public void findDeterminant() {
-        int det = 1;
-        for (int i=0; i<n; i++) {
-            det*=matrix[i][i];
-        }
-        System.out.println("Определитель равен: " + det);
-    }
-
-    public void printMatrix() {
-        DecimalFormat dF = new DecimalFormat( "#.###" );
+    public void findDeterminant ( ) {
+        double det = 1d;
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (dF.format(matrix[i][j]).equals("-0.000")) System.out.printf("%15.3f", 0d);
-                else System.out.printf("%15.3f", matrix[i][j]);
-            }
-            if (dF.format(b[i]).equals("-0.000")) System.out.printf("%15.3f", 0d);
-            else System.out.printf("%15.3f", b[i]);
-            System.out.println("\r");
+            det *= matrix[i][i];
+        }
+        writer.printValue("%1.3f", "Определитель равен: ", det);
+        System.out.println( );
+        if (det == 0) {
+            System.out.println("Ой-ой-ой, смотрите-ка, определитель равен нулю, а значит, система имеет либо бесконечное количество решений, либо не имеет решений вообще. \nНекрасиво, правда? Давайте-ка вы все исправите и мы попробуем еще раз." );
+            System.exit(0);
         }
     }
 
-    public void printUnknowns() {
-        DecimalFormat dF = new DecimalFormat( "#.###" );
-        System.out.println("Вектор неизвестных: ");
-        int count = 0;
-        for (int i=0; i<n; i++) {
-            count++;
-            System.out.print("x" + count+ " = ");
-            if (dF.format(x[i]).equals("-0.000")) System.out.printf("%1.3f", 0d);
-            else System.out.printf("%1.3f", x[i]);
-            System.out.println();
+    public void findUnknowns ( ) {
+        for (int i = n - 1; i >= 0; i--) {
+            double tmp = b[i];
+            for (int j = n - 1; j > i; j--) {
+                tmp -= matrix[i][j] * x[j];
+            }
+            x[i] = tmp / matrix[i][i];
         }
+
+        writer.printVector("Вектор неизвестных: ", "x", x);
     }
+
+    public void findDiscrepancy ( ) {
+        for (int i = 0; i < n; i++) {
+            double ax_ = 0;
+            for (int j = 0; j < n; j++) {
+                ax_ += oldMatrix[i][j] * x[j];
+            }
+            r[i] = ax_ - oldB[i];
+        }
+
+        writer.printVector("Вектор невязок: ", "r", r);
+    }
+
+
     public int getN ( ) {
         return n;
     }

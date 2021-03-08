@@ -37,15 +37,19 @@ public class ReaderFromFile extends Reader {
                 String line = getBufferedReader( ).readLine( );
                 String[] matrix1 = new String[reader.getN( )+1];
                 matrix1 = line.split(" ");
+                if (matrix1.length > reader.getN() + 1) throw new NumberFormatException();
                 for (int j = 0; j < reader.getN( ); j++) {
-                    matrix2[i][j] = Integer.parseInt(matrix1[j]);
+                    matrix2[i][j] = Double.parseDouble(matrix1[j]);
                 }
-                b[i] = Integer.parseInt(matrix1[reader.getN()]);
+                b[i] = Double.parseDouble(matrix1[reader.getN()]);
             }
+            String line = getBufferedReader( ).readLine( );
+            if (line != null) throw new NumberFormatException();
         } catch (NullPointerException | NumberFormatException ex) {
             System.out.println("Ваша матрица неисправна. Исправьте файл и повторите ввод");
             System.exit(0);
         }
+
         reader.setB(b);
         return matrix2;
     }

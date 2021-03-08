@@ -42,8 +42,11 @@ public class Reader {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Файла с таким именем не существует");
+            System.exit(0);
         } catch (IOException e) {
             System.out.println("Ой-ой, что-то пошло не так");
+            System.exit(0);
+
         }
 
     }
